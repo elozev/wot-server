@@ -6,6 +6,7 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
+    "mocha": "^5.2.0",
     "body-parser": "~1.18.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
