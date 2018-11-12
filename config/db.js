@@ -1,5 +1,7 @@
 'use strict'
 
+const constants = require('./constants');
+// const bcrypt = require('bcrypt');
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize('workontime', 'elozev', 'wotthebest', {
     host: 'localhost',
@@ -24,7 +26,7 @@ const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-
+db.salt = constants.salt;
 
 //TODO: add models to db
 db.users = require('../models/user')(sequelize, Sequelize);

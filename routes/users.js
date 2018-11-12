@@ -14,10 +14,12 @@ module.exports = (router, db) => {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             //TODO: encrypt password
-            password: req.body.password,
+            password: db.users.generateHash(req.body.password),
+            //TODO: verify email
+            email: req.body.email,
             bio: req.body.bio
-        }
-        //TODO: Throw error
+        };
+
         db.users.create(userToCreate)
             .then(newUser => {
                 res.status(200).json(newUser);
@@ -26,7 +28,7 @@ module.exports = (router, db) => {
                 res.status(422).send(msg.errors);
             })
             .catch((err) => {
-                return res.status(400).json({message: "issue trying to connect to database"});
+                return res.status(400).json({message: "issue trying to connect to database", stack_trace: err.errors});
             })
     });
 

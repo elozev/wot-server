@@ -1,4 +1,5 @@
 'use strict'
+const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, Sequelize) => {
     const User = sequelize.define('user', {
@@ -7,6 +8,15 @@ module.exports = (sequelize, Sequelize) => {
             primaryKey: true,
             autoIncrement: true
         },
+        email: {
+            type: Sequelize.STRING(320),
+            allowNull: false,
+            unique: true,
+            validate: {
+                isEmail: true
+            }
+        },
+
         first_name: {
             type: Sequelize.STRING,
             allowNull: false
@@ -17,13 +27,34 @@ module.exports = (sequelize, Sequelize) => {
         },
         password: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: [6, 100]
+            }
         },
         bio: {
             type: Sequelize.TEXT,
             allowNull: true
         }
     });
+
+    User.beforeCreate((user, options) => {
+        console.log("before create");
+        // //TODO: hash password
+        bcrypt.hash(user.password, 10, (err, hash) => {
+            if (err) return next(err);
+            user.password = hash;
+        });
+        return user;
+    });
+
+    User.generateHash = (password) => {
+        return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+    };
+
+    User.prototype.validPassword = (password) => {
+        return bcrypt.compareSync(password, this.password);
+    };
 
     return User;
 };
