@@ -1,7 +1,8 @@
 'use strict'
 
 const routes = [
-    require('./users')
+    require('./users'),
+    require('./authentication')
 ];
 
 

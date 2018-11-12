@@ -39,8 +39,6 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     User.beforeCreate((user, options) => {
-        console.log("before create");
-        // //TODO: hash password
         bcrypt.hash(user.password, 10, (err, hash) => {
             if (err) return next(err);
             user.password = hash;
@@ -52,7 +50,7 @@ module.exports = (sequelize, Sequelize) => {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
     };
 
-    User.prototype.validPassword = (password) => {
+    User.prototype.validPassword = function (password) {
         return bcrypt.compareSync(password, this.password);
     };
 

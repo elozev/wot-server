@@ -13,9 +13,7 @@ module.exports = (router, db) => {
         const userToCreate = {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
-            //TODO: encrypt password
             password: db.users.generateHash(req.body.password),
-            //TODO: verify email
             email: req.body.email,
             bio: req.body.bio
         };
