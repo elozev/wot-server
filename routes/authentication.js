@@ -1,4 +1,5 @@
 'use strict'
+const jwt = require('jsonwebtoken');
 
 module.exports = (router, db) => {
     router.post('/auth', (req, res, next) => {
@@ -9,9 +10,22 @@ module.exports = (router, db) => {
                 else if (user) {
 
                     if (!user.validPassword(req.body.password)) {
-                        res.json({message: "Password do not match!"});
+                        res.status(401).json({
+                            success: false,
+                            message: "Password do not match!"
+                        });
                     } else {
-                        res.json({message: "Here is your token!"});
+                        //--------------------  payload ------------ secret_key
+                        const token = jwt.sign({email: user.email}, db.constants.secret, {expiresIn: db.constants.token_expiration});
+                        const expiresAt = Date.now() + db.constants.token_expiration;
+                        res.status(200)
+                            .json({
+                                success: true,
+                                message: "Token generated",
+                                expiresAt: expiresAt,
+                                expiresAtPretty: new Date(expiresAt),
+                                token: token
+                            })
                     }
                 }
             });

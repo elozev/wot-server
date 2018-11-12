@@ -26,7 +26,7 @@ const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.salt = constants.salt;
+db.constants = constants;
 
 //TODO: add models to db
 db.users = require('../models/user')(sequelize, Sequelize);
