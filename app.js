@@ -15,6 +15,9 @@ app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+
+router(app, db);
+
 app.use((req, res, next) => {
     res.header('Content-type', 'application/json');
 });
@@ -29,8 +32,6 @@ app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.json({errorCode: err.status, message: err.message});
 });
-
-router(app, db);
 
 db.sequelize.sync().then(() => {
     app.listen(port, () => {
