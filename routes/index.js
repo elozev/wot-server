@@ -1,12 +1,11 @@
-var express = require('express');
-var router = express.Router();
+'use strict'
 
-const userRouter = require("./users");
-router.use('/users', userRouter);
+const routes = [
+    require('./users'),
+];
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.json({ message: 'Get /' });
-});
-
-module.exports = router;
+module.exports = function router(router, db) {
+    return routes.forEach((route) => {
+        route(router, db);
+    })
+};
